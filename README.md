@@ -1,12 +1,11 @@
-### NAME:
-### ROLL NO :
-### DEPARTMENT 
-### DATE
+### NAME: Sivaramakrishnan B
+### ROLL NO : 212222110044
+### DEPARTMENT: CSE(IOT)
 
 
 
 ## EXPERIMENT-04-TRASFERING-DATA-TO-MQTT-CLOUD-USING-PYTHON-INTERFACE-
-
+ 
 
 
 ## AIM:
@@ -138,16 +137,55 @@ Run the Python script.
 
 Check if the message appears in the HiveMQ Web Client.
 ## PROGRAM
-[
+```
+import paho.mqtt.client as mqtt
+import time
+
+# HiveMQ Cloud credentials
+BROKER = "359f43e9448d4f6ebc5011e7c24dc49b.s1.eu.hivemq.cloud"  # Updated HiveMQ Cloud instance URL
+PORT = 8884  # Secure WebSocket port
+TOPIC = "sensor/temperature"
+USERNAME = "Kancharla_Narmadha"  # Replace with your HiveMQ Cloud username
+PASSWORD = "Linzz_129"  # Replace with your HiveMQ Cloud password
+
+# Fixed temperature value
+TEMPERATURE_VALUE = 25.5
+
+# Callback when the client connects to the broker
+def on_connect(client, userdata, flags, rc, properties=None):
+    if rc == 0:
+        print("Connected to HiveMQ Cloud successfully")
+    else:
+        print(f"Connection failed with code {rc}")
+
+# Create MQTT client and set WebSocket transport
+client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, transport="websockets")
+client.username_pw_set(USERNAME, PASSWORD)
+client.tls_set()  # Enable TLS for secure WebSockets
+client.on_connect = on_connect
+
+# Connect to HiveMQ Cloud using WebSocket
+client.connect(BROKER, PORT, 60)
+client.loop_start()
+
+# Publish temperature value repeatedly every 5 seconds
+try:
+    while True:
+        client.publish(TOPIC, TEMPERATURE_VALUE)
+        print(f"Published temperature: {TEMPERATURE_VALUE} to topic: {TOPIC}")
+        time.sleep(5)  # Adjust interval as needed
+except KeyboardInterrupt:
+    print("Stopping MQTT client...")
+    client.loop_stop()
+    client.disconnect()
 
 
-
-
-
-]
-
+```
 ### OUTPUT SCREENSHOTS
 
+![WhatsApp Image 2025-05-21 at 13 34 29_5afc5137](https://github.com/user-attachments/assets/91b3e5ac-30f9-4473-aeda-f0c5650e984e)
+
+![WhatsApp Image 2025-05-21 at 13 34 45_ac9690cd](https://github.com/user-attachments/assets/2aded154-511a-4c95-b9ff-c29d0e3c5c1b)
 
 
 ## Results
